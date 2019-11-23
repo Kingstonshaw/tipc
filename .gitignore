@@ -16,4 +16,5 @@ build
 *.bc
 *.ll
 
-
+# VS Code
+.vscode/
