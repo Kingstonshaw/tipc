@@ -332,6 +332,14 @@ Any TIPtreeBuild::visitAccessExpr(TIPParser::AccessExprContext *ctx) {
   return "";
 }
 
+Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
+  return "";
+}
+
+Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
+  return "";
+}
+
 Any TIPtreeBuild::visitAssignableExpr(TIPParser::AssignableExprContext *ctx) {
   if (ctx->IDENTIFIER() != nullptr) {
     std::string aName = ctx->IDENTIFIER()->getText();

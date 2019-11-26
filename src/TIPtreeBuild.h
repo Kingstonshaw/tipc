@@ -35,6 +35,8 @@ public:
   Any visitRecordExpr(TIPParser::RecordExprContext *ctx) override;
   Any visitFieldExpr(TIPParser::FieldExprContext *ctx) override;
   Any visitAccessExpr(TIPParser::AccessExprContext *ctx) override;
+  Any visitArrayExpr(TIPParser::ArrayExprContext *ctx) override;
+  Any visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) override;
   Any visitAssignableExpr(TIPParser::AssignableExprContext *ctx) override;
   Any visitDeclaration(TIPParser::DeclarationContext *ctx) override;
   Any visitAssignmentStmt(TIPParser::AssignmentStmtContext *ctx) override;

@@ -48,7 +48,9 @@ atom : parenExpr	#parenAtom
      | deRefExpr	#deRefAtom
      | KNULL		#nullExpr
      | recordExpr	#recordAtom
-     | accessExpr	#recordAtom
+     | accessExpr	#accessAtom
+     | arrayExpr    #arrayAtom
+     | arrayIndexExpr   #arrayIndexAtom
 ;
 
 parenExpr : '(' expr ')' ;
@@ -67,9 +69,14 @@ fieldExpr : IDENTIFIER ':' expr ;
 // "Access" in TIP
 accessExpr : (IDENTIFIER | deRefExpr | parenExpr) '.' IDENTIFIER ;
 
-// "AssignableExpression" in TIP
-assignableExpr : (IDENTIFIER | deRefExpr) ;
+// "Array"
+arrayExpr : '[' (expr (',' expr)*)? ']' ;
 
+// "ArrayIndex"
+arrayIndexExpr : (parenExpr | IDENTIFIER) '[' expr ']' ;
+
+// "AssignableExpression" in TIP
+assignableExpr : (IDENTIFIER | deRefExpr | arrayIndexExpr) ;
 
 ////////////////////// TIP Statements ////////////////////////// 
 
