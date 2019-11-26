@@ -337,6 +337,21 @@ Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
 }
 
 Any TIPtreeBuild::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
+  std::unique_ptr<Expr> array, index;
+  if (ctx->IDENTIFIER() != nullptr) {
+    std::string name = ctx->IDENTIFIER()->getText();
+    array = llvm::make_unique<VariableExpr>(name);
+  } else if (ctx->parenExpr() != nullptr) {
+    visit(ctx->parenExpr())
+    array = std::move(visitedExpr);
+  } else {
+    // one of these alternative must be defined
+    assert(false);
+  }
+  visit(ctx->expr())
+  index = std::move(visitedExpr);
+
+  visitedExpr = llvm::make_unique<ArrayIndexExpr>(std::move(array), std::move(index));
   return "";
 }
 
