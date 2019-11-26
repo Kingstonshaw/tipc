@@ -336,7 +336,7 @@ Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
   return "";
 }
 
-Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
+Any TIPtreeBuild::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
   return "";
 }
 

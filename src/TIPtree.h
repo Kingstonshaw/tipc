@@ -168,6 +168,17 @@ public:
   std::string print() override;
 };
 
+class ArrayIndexExpr : public Expr {
+  std::unique_ptr<Expr> ARRAY;
+  std::unique_ptr<Expr> INDEX;
+
+public:
+  ArrayIndexExpr(std::unique_ptr<Expr> ARRAY, std::unique_ptr<Expr> INDEX)
+      : ARRAY(std::move(ARRAY)), INDEX(std::move(INDEX)) {}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+
 /******************* Statement AST Nodes *********************/
 
 // Stmt - Base class for all statement nodes.
