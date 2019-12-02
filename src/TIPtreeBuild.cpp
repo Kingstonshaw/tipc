@@ -446,3 +446,19 @@ Any TIPtreeBuild::visitReturnStmt(TIPParser::ReturnStmtContext *ctx) {
   visitedStmt = llvm::make_unique<ReturnStmt>(std::move(visitedExpr));
   return "";
 }
+
+Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
+
+  std::vector<std::unique_ptr<Expr>> elements;
+
+  for (auto e : ctx->expr()) {
+    visit(e);
+    elements.push_back(std::move(visitedExpr));
+  }
+
+      visitedExpr =
+      llvm::make_unique<ArrayExpr>(std::move(elements));
+  return "";
+}
+
+
