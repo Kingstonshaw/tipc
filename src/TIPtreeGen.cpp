@@ -586,7 +586,28 @@ llvm::Value *ArrayExpr::codegen() {
 }
 
 llvm::Value *ArrayIndexExpr::codegen() {
-  return LogError("Not implemented");
+  bool isLValue = lValueGen;
+  lValueGen = false;
+  Value *arrBase = ARRAY->codegen();
+  if (arrBase == nullptr) {
+    return nullptr;
+  }
+  Value *index = INDEX->codegen();
+  if (index == nullptr) {
+    return nullptr;
+  }
+  auto *basePtr = Builder.CreateIntToPtr(
+    arrBase, Type::getInt64PtrTy(TheContext), "basePtr");
+  auto one = ConstantInt::get(Type::getInt64Ty(TheContext), 1);
+  auto *indexPlusOne = Builder.CreateAdd(index, one, "indexPlusOne");
+  auto *addr = Builder.CreateGEP(basePtr, indexPlusOne, "address");
+  if (isLValue) {
+    // For an l-value, just compute the address and return it.
+    return addr;
+  } else {
+    // For an r-value, compute the address and return the value it points to.
+    return Builder.CreateLoad(addr, "valueAt");
+  }
 }
 
 llvm::Value *LenExpr::codegen() {
