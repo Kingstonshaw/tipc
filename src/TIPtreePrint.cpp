@@ -118,8 +118,8 @@ std::string RecordExpr::print() {
 std::string AccessExpr::print() { return RECORD->print() + "." + FIELD; }
 
 std::string ArrayExpr::print() {
-std::string pp= "[";
-bool skip = true;
+  std::string pp = "[";
+  bool skip = true;
   for (auto const &field : ELEMENTS) {
     if (skip) {
       skip = false;
@@ -128,12 +128,15 @@ bool skip = true;
       pp += ", " + field->print();
     }
   }
-
-  return pp + " ]";
-  }
+  return pp + "]";
+}
 
 std::string ArrayIndexExpr::print() {
   return ARRAY->print() + "[" + INDEX->print() + "]";
+}
+
+std::string LenExpr::print() {
+  return "len (" + ARRAY->print() + ")";
 }
 
 std::string DeclStmt::print() {

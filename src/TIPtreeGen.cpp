@@ -589,6 +589,10 @@ llvm::Value *ArrayIndexExpr::codegen() {
   return LogError("Not implemented");
 }
 
+llvm::Value *LenExpr::codegen() {
+  return LogError("Not implemented");
+}
+
 llvm::Value *DeclStmt::codegen() {
   // The LLVM builder records the function we are currently generating
   llvm::Function *TheFunction = Builder.GetInsertBlock()->getParent();

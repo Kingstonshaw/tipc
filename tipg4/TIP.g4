@@ -50,8 +50,8 @@ atom : parenExpr	#parenAtom
      | recordExpr	#recordAtom
      | accessExpr	#accessAtom
      | arrayExpr	#arrayAtom
-     | arrayIndexExpr   #arrayIndexAtom
-     | KLEN epxr	#lenExpr
+     | arrayIndexExpr	#arrayIndexAtom
+     | lenExpr		#lenAtom
 ;
 
 parenExpr : '(' expr ')' ;
@@ -75,6 +75,9 @@ arrayExpr : '[' (expr (',' expr)*)? ']' ;
 
 // "ArrayIndex"
 arrayIndexExpr : (parenExpr | IDENTIFIER) '[' expr ']' ;
+
+// "Len"
+lenExpr : KLEN atom ;
 
 // "AssignableExpression" in TIP
 assignableExpr : (IDENTIFIER | deRefExpr | arrayIndexExpr) ;
@@ -144,6 +147,7 @@ KNULL   : 'null' ;
 KOUTPUT : 'output' ;
 KERROR  : 'error' ;
 KLEN	: 'len' ;
+
 // "Identifier" (in Scala) is "X" (in SPA)
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]* ;
 

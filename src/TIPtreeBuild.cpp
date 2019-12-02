@@ -362,8 +362,9 @@ Any TIPtreeBuild::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
   visitedExpr = llvm::make_unique<ArrayIndexExpr>(std::move(array), std::move(index));
   return "";
 }
+
 Any TIPtreeBuild::visitLenExpr(TIPParser::LenExprContext *ctx) {
-  visit(ctx->expr());
+  visit(ctx->atom());
   visitedExpr = llvm::make_unique<LenExpr>(std::move(visitedExpr));
   return "";
 }

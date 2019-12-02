@@ -37,6 +37,7 @@ public:
   Any visitAccessExpr(TIPParser::AccessExprContext *ctx) override;
   Any visitArrayExpr(TIPParser::ArrayExprContext *ctx) override;
   Any visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) override;
+  Any visitLenExpr(TIPParser::LenExprContext *ctx) override;
   Any visitAssignableExpr(TIPParser::AssignableExprContext *ctx) override;
   Any visitDeclaration(TIPParser::DeclarationContext *ctx) override;
   Any visitAssignmentStmt(TIPParser::AssignmentStmtContext *ctx) override;
