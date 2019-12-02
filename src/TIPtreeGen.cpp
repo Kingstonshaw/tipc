@@ -581,6 +581,14 @@ llvm::Value *AccessExpr::codegen() {
   return LogError("Field access expressions not implemented");
 }
 
+llvm::Value *ArrayExpr::codegen() {
+  return LogError("Not implemented");
+}
+
+llvm::Value *ArrayIndexExpr::codegen() {
+  return LogError("Not implemented");
+}
+
 llvm::Value *DeclStmt::codegen() {
   // The LLVM builder records the function we are currently generating
   llvm::Function *TheFunction = Builder.GetInsertBlock()->getParent();
