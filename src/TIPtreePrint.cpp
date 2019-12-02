@@ -117,6 +117,14 @@ std::string RecordExpr::print() {
 
 std::string AccessExpr::print() { return RECORD->print() + "." + FIELD; }
 
+std::string ArrayExpr::print() {
+  return "";
+}
+
+std::string ArrayIndexExpr::print() {
+  return ARRAY->print() + "[" + INDEX->print() + "]";
+}
+
 std::string DeclStmt::print() {
   std::string pp = "var ";
   // comma separated variable names list
