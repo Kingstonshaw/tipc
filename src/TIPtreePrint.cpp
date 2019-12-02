@@ -55,11 +55,11 @@ std::string Function::print() {
   for (auto const &stmt : BODY) {
     pp += indentation() + stmt->print() + "\n";
   }
-
+  
   indentLevel--;
   pp += indentation() + "}\n";
   indentLevel--;
-
+  
   return pp;
 }
 
@@ -118,8 +118,19 @@ std::string RecordExpr::print() {
 std::string AccessExpr::print() { return RECORD->print() + "." + FIELD; }
 
 std::string ArrayExpr::print() {
-  return "";
-}
+std::string pp= "[";
+bool skip = true;
+  for (auto const &field : ELEMENTS) {
+    if (skip) {
+      skip = false;
+      pp += field->print();
+    } else {
+      pp += ", " + field->print();
+    }
+  }
+
+  return pp + " ]";
+  }
 
 std::string ArrayIndexExpr::print() {
   return ARRAY->print() + "[" + INDEX->print() + "]";

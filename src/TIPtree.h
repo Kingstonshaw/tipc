@@ -191,6 +191,16 @@ public:
   std::string print() override;
 };
 
+class LenExpr : public Expr {
+  std::unique_ptr<Expr> ARRAY;
+public:
+ ArrayIndexExpr(std::unique_ptr<Expr> ARRAY)
+      : ARRAY(std::move(ARRAY)){}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+
+
 /******************* Statement AST Nodes *********************/
 
 // Stmt - Base class for all statement nodes.
