@@ -167,7 +167,21 @@ public:
   llvm::Value *codegen() override;
   std::string print() override;
 };
+/*********************************************/
+class ArrayExpr: public Expr {
+  std::vector<std::unique_ptr<Expr>> ELEMENTS;
 
+public:
+  ArrayExpr( std::vector<std::unique_ptr<Expr>> ELEMENTS)
+      :ELEMENTS(std::move(ELEMENTS)) {}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+
+
+
+
+/*********************************************/
 class ArrayIndexExpr : public Expr {
   std::unique_ptr<Expr> ARRAY;
   std::unique_ptr<Expr> INDEX;
