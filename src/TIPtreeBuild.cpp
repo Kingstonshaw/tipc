@@ -370,6 +370,9 @@ Any TIPtreeBuild::visitAssignableExpr(TIPParser::AssignableExprContext *ctx) {
   } else if (ctx->deRefExpr() != nullptr) {
     visit(ctx->deRefExpr());
     // leave visitedExpr from deRefExpr unchanged
+  } else if (ctx->arrayIndexExpr() != nullptr) {
+    visit(ctx->arrayIndexExpr());
+    // leave visitedExpr from arrayIndexExpr unchanged
   } else {
     // one of these alternative must be defined
     assert(false);
