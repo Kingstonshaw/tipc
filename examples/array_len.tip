@@ -1,0 +1,5 @@
+main() {
+  var arr;
+  output len arr;
+  return 0;
+}
