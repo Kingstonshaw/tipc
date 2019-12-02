@@ -333,6 +333,14 @@ Any TIPtreeBuild::visitAccessExpr(TIPParser::AccessExprContext *ctx) {
 }
 
 Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
+  std::vector<std::unique_ptr<Expr>> elements;
+
+  for (auto e : ctx->expr()) {
+    visit(e);
+    elements.push_back(std::move(visitedExpr));
+  }
+
+  visitedExpr = llvm::make_unique<ArrayExpr>(std::move(elements));
   return "";
 }
 
@@ -342,13 +350,13 @@ Any TIPtreeBuild::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
     std::string name = ctx->IDENTIFIER()->getText();
     array = llvm::make_unique<VariableExpr>(name);
   } else if (ctx->parenExpr() != nullptr) {
-    visit(ctx->parenExpr())
+    visit(ctx->parenExpr());
     array = std::move(visitedExpr);
   } else {
     // one of these alternative must be defined
     assert(false);
   }
-  visit(ctx->expr())
+  visit(ctx->expr());
   index = std::move(visitedExpr);
 
   visitedExpr = llvm::make_unique<ArrayIndexExpr>(std::move(array), std::move(index));
@@ -446,19 +454,3 @@ Any TIPtreeBuild::visitReturnStmt(TIPParser::ReturnStmtContext *ctx) {
   visitedStmt = llvm::make_unique<ReturnStmt>(std::move(visitedExpr));
   return "";
 }
-
-Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
-
-  std::vector<std::unique_ptr<Expr>> elements;
-
-  for (auto e : ctx->expr()) {
-    visit(e);
-    elements.push_back(std::move(visitedExpr));
-  }
-
-      visitedExpr =
-      llvm::make_unique<ArrayExpr>(std::move(elements));
-  return "";
-}
-
-
