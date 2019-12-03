@@ -1,8 +1,5 @@
 main() {
   var arr;
   arr = [1, 2, 3, 4, 5];
-  arr[3] = 7;
-  output arr[3];
-  output arr[4];
   return 0;
 }
