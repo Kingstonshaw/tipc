@@ -582,7 +582,37 @@ llvm::Value *AccessExpr::codegen() {
 }
 
 llvm::Value *ArrayExpr::codegen() {
-  return LogError("Not implemented");
+  if (mallocFun == nullptr) {
+    std::vector<Type *> oneInt(1, Type::getInt64Ty(TheContext));
+    auto *FT = FunctionType::get(Type::getInt8PtrTy(TheContext), oneInt, false);
+    mallocFun = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,
+                                       "malloc", CurrentModule.get());
+    mallocFun->addFnAttr(llvm::Attribute::NoUnwind);
+    mallocFun->addAttribute(0, llvm::Attribute::NoAlias);
+  }
+
+  uint64_t size = (ELEMENTS.size() + 1) * 8;
+  auto *sizeVal = ConstantInt::get(Type::getInt64Ty(TheContext), size);
+  auto *allocInst = Builder.CreateCall(mallocFun, {sizeVal}, "allocPtr");
+  auto *castPtr = Builder.CreatePointerCast(
+      allocInst, Type::getInt64PtrTy(TheContext), "castPtr");
+
+  // Initialize size
+  auto *lenVal = ConstantInt::get(Type::getInt64Ty(TheContext), ELEMENTS.size());
+  auto *lenInd = ConstantInt::get(Type::getInt64Ty(TheContext), 0);
+  auto *lenAddr = Builder.CreateGEP(castPtr, lenInd, "lenAddress");
+  Builder.CreateStore(lenVal, lenAddr);
+  // Initialize elements
+  uint64_t i = 1;
+  for (auto &elem : ELEMENTS) {
+    Value *elemVal = elem->codegen();
+    auto *ind = ConstantInt::get(Type::getInt64Ty(TheContext), i++);
+    auto *addr = Builder.CreateGEP(castPtr, ind, "address");
+    Builder.CreateStore(elemVal, addr);
+  }
+
+  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),
+                                "allocIntVal");
 }
 
 llvm::Value *ArrayIndexExpr::codegen() {
@@ -598,7 +628,7 @@ llvm::Value *ArrayIndexExpr::codegen() {
   }
   auto *basePtr = Builder.CreateIntToPtr(
     arrBase, Type::getInt64PtrTy(TheContext), "basePtr");
-  auto one = ConstantInt::get(Type::getInt64Ty(TheContext), 1);
+  auto *one = ConstantInt::get(Type::getInt64Ty(TheContext), 1);
   auto *indexPlusOne = Builder.CreateAdd(index, one, "indexPlusOne");
   auto *addr = Builder.CreateGEP(basePtr, indexPlusOne, "address");
   if (isLValue) {
