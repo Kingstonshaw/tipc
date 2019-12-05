@@ -606,6 +606,9 @@ llvm::Value *ArrayExpr::codegen() {
   uint64_t i = 1;
   for (auto &elem : ELEMENTS) {
     Value *elemVal = elem->codegen();
+    if (elemVal == nullptr) {
+      return nullptr;
+    }
     auto *ind = ConstantInt::get(Type::getInt64Ty(TheContext), i++);
     auto *addr = Builder.CreateGEP(castPtr, ind, "address");
     Builder.CreateStore(elemVal, addr);
