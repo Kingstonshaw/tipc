@@ -369,6 +369,18 @@ Any TIPtreeBuild::visitLenExpr(TIPParser::LenExprContext *ctx) {
   return "";
 }
 
+Any TIPtreeBuild::visitFreeExpr(TIPParser::FreeExprContext *ctx) {
+  visit(ctx->atom());
+  visitedExpr = llvm::make_unique<FreeExpr>(std::move(visitedExpr));
+  return "";
+}
+
+Any TIPtreeBuild::visitArraySizedExpr(TIPParser::ArraySizedExpr *ctx) {
+  visit(ctx->expr());
+  visitedExpr = llvm::make_unique<ArraySizedExpr>(std::move(visitedExpr));
+  return "";
+}
+
 Any TIPtreeBuild::visitAssignableExpr(TIPParser::AssignableExprContext *ctx) {
   if (ctx->IDENTIFIER() != nullptr) {
     std::string aName = ctx->IDENTIFIER()->getText();
