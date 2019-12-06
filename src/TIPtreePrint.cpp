@@ -131,6 +131,10 @@ std::string ArrayExpr::print() {
   return pp + "]";
 }
 
+std::string ArraySizedExpr::print() {
+  return "array[" + SIZE->print() + "]";
+}
+
 std::string ArrayIndexExpr::print() {
   return ARRAY->print() + "[" + INDEX->print() + "]";
 }
@@ -200,5 +204,7 @@ std::string OutputStmt::print() { return "output " + ARG->print() + ";"; }
 std::string ErrorStmt::print() { return "error " + ARG->print() + ";"; }
 
 std::string ReturnStmt::print() { return "return " + ARG->print() + ";"; }
+
+std::string FreeStmt::print() { return "free " + ARRAY->print() + ";"; }
 
 } // namespace TIPtree

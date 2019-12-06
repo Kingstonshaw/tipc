@@ -344,7 +344,7 @@ Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
   return "";
 }
 
-Any TIPtreeBuild::visitArraySizedExpr(TIPParser::ArraySizedExpr *ctx) {
+Any TIPtreeBuild::visitArraySizedExpr(TIPParser::ArraySizedExprContext *ctx) {
   visit(ctx->expr());
   visitedExpr = llvm::make_unique<ArraySizedExpr>(std::move(visitedExpr));
   return "";
@@ -471,7 +471,7 @@ Any TIPtreeBuild::visitReturnStmt(TIPParser::ReturnStmtContext *ctx) {
 }
 
 Any TIPtreeBuild::visitFreeStmt(TIPParser::FreeStmtContext *ctx) {
-  visit(ctx->atom());
+  visit(ctx->expr());
   visitedStmt = llvm::make_unique<FreeStmt>(std::move(visitedExpr));
   return "";
 }

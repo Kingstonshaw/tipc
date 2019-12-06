@@ -631,17 +631,22 @@ llvm::Value *ArraySizedExpr::codegen() {
     callocFun->addAttribute(0, llvm::Attribute::NoAlias);
   }
 
-  auto *numVal = ConstantInt::get(Type::getInt64Ty(TheContext), size + 1);
-  auto *sizeVal = ConstantInt::get(Type::getInt64Ty(TheContext), 8);
-  auto *allocInst = Builder.CreateCall(callocFun, {numVal, sizeVal}, "allocPtr");
+  Value *sizeVal = SIZE->codegen();
+  if (sizeVal == nullptr) {
+    return nullptr;
+  }
+  auto *one = ConstantInt::get(Type::getInt64Ty(TheContext), 1);
+  auto *sizePlusOne = Builder.CreateAdd(sizeVal, one, "sizePlusOne");
+
+  auto *eight = ConstantInt::get(Type::getInt64Ty(TheContext), 8);
+  auto *allocInst = Builder.CreateCall(callocFun, {sizePlusOne, eight}, "allocPtr");
   auto *castPtr = Builder.CreatePointerCast(
       allocInst, Type::getInt64PtrTy(TheContext), "castPtr");
 
   // Initialize size
-  auto *lenVal = ConstantInt::get(Type::getInt64Ty(TheContext), ELEMENTS.size());
   auto *lenInd = ConstantInt::get(Type::getInt64Ty(TheContext), 0);
   auto *lenAddr = Builder.CreateGEP(castPtr, lenInd, "lenAddress");
-  Builder.CreateStore(lenVal, lenAddr);
+  Builder.CreateStore(sizeVal, lenAddr);
 
   return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),
                                 "allocIntVal");
