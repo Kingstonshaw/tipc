@@ -50,6 +50,7 @@ atom : parenExpr	#parenAtom
      | recordExpr	#recordAtom
      | accessExpr	#accessAtom
      | arrayExpr	#arrayAtom
+     | arraySizedExpr	#arraySizedAtom
      | arrayIndexExpr	#arrayIndexAtom
      | lenExpr		#lenAtom
 ;
@@ -70,11 +71,11 @@ fieldExpr : IDENTIFIER ':' expr ;
 // "Access" in TIP
 accessExpr : (IDENTIFIER | deRefExpr | parenExpr) '.' IDENTIFIER ;
 
-// "ArraySized" in TIP
-arraySizedExpr : KARRAY '[' expr ']' ;
-
 // "Array"
 arrayExpr : '[' (expr (',' expr)*)? ']' ;
+
+// "ArraySized"
+arraySizedExpr : KARRAY '[' expr ']' ;
 
 // "ArrayIndex"
 arrayIndexExpr : (parenExpr | IDENTIFIER) '[' expr ']' ;
@@ -98,6 +99,7 @@ statement : blockStmt
     | ifStmt
     | outputStmt
     | errorStmt
+    | freeStmt
 ;
 
 // "Assignment" in TIP
