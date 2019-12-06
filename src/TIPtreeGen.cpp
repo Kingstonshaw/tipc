@@ -58,6 +58,8 @@ static llvm::Function *inputIntrinsic = nullptr;
 static llvm::Function *outputIntrinsic = nullptr;
 static llvm::Function *errorIntrinsic = nullptr;
 static llvm::Function *mallocFun = nullptr;
+static llvm::Function *callocFun = nullptr;
+static llvm::Function *freeFun = nullptr;
 
 // A counter to create unique labels
 static int labelNum = 0;
@@ -618,6 +620,33 @@ llvm::Value *ArrayExpr::codegen() {
                                 "allocIntVal");
 }
 
+llvm::Value *ArraySizedExpr::codegen() {
+  if (callocFun == nullptr) {
+    std::vector<Type *> argTypes {Type::getInt64Ty(TheContext),
+                                  Type::getInt64Ty(TheContext)};
+    auto *FT = FunctionType::get(Type::getInt8PtrTy(TheContext), argTypes, false);
+    callocFun = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,
+                                       "calloc", CurrentModule.get());
+    callocFun->addFnAttr(llvm::Attribute::NoUnwind);
+    callocFun->addAttribute(0, llvm::Attribute::NoAlias);
+  }
+
+  auto *numVal = ConstantInt::get(Type::getInt64Ty(TheContext), size + 1);
+  auto *sizeVal = ConstantInt::get(Type::getInt64Ty(TheContext), 8);
+  auto *allocInst = Builder.CreateCall(callocFun, {numVal, sizeVal}, "allocPtr");
+  auto *castPtr = Builder.CreatePointerCast(
+      allocInst, Type::getInt64PtrTy(TheContext), "castPtr");
+
+  // Initialize size
+  auto *lenVal = ConstantInt::get(Type::getInt64Ty(TheContext), ELEMENTS.size());
+  auto *lenInd = ConstantInt::get(Type::getInt64Ty(TheContext), 0);
+  auto *lenAddr = Builder.CreateGEP(castPtr, lenInd, "lenAddress");
+  Builder.CreateStore(lenVal, lenAddr);
+
+  return Builder.CreatePtrToInt(castPtr, Type::getInt64Ty(TheContext),
+                                "allocIntVal");
+}
+
 llvm::Value *ArrayIndexExpr::codegen() {
   bool isLValue = lValueGen;
   lValueGen = false;
@@ -652,7 +681,6 @@ llvm::Value *LenExpr::codegen() {
   auto *basePtr = Builder.CreateIntToPtr(
     arrBase, Type::getInt64PtrTy(TheContext), "basePtr");
   return Builder.CreateLoad(basePtr, "valueAt");
-  
 }
 
 llvm::Value *DeclStmt::codegen() {
@@ -903,6 +931,26 @@ llvm::Value *ErrorStmt::codegen() {
 llvm::Value *ReturnStmt::codegen() {
   Value *argVal = ARG->codegen();
   return Builder.CreateRet(argVal);
+}
+
+llvm::Value *FreeStmt::codegen() {
+  if (freeFun == nullptr) {
+    std::vector<Type *> argTypes {Type::getInt8PtrTy(TheContext)};
+    auto *FT = FunctionType::get(Type::getVoidTy(TheContext), argTypes, false);
+    freeFun = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,
+                                     "free", CurrentModule.get());
+    freeFun->addFnAttr(llvm::Attribute::NoUnwind);
+    freeFun->addAttribute(0, llvm::Attribute::NoAlias);
+  }
+
+  Value *arrBase = ARRAY->codegen();
+  if (arrBase == nullptr) {
+    return nullptr;
+  }
+
+  auto *basePtr = Builder.CreateIntToPtr(
+    arrBase, Type::getInt8PtrTy(TheContext), "basePtr");
+  return Builder.CreateCall(freeFun, {basePtr}, "freeInst");
 }
 
 } // namespace TIPtree
