@@ -36,6 +36,7 @@ public:
   Any visitFieldExpr(TIPParser::FieldExprContext *ctx) override;
   Any visitAccessExpr(TIPParser::AccessExprContext *ctx) override;
   Any visitArrayExpr(TIPParser::ArrayExprContext *ctx) override;
+  Any visitArraySizedExpr(TIPParser::ArraySizedExprContext *ctx) override;
   Any visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) override;
   Any visitLenExpr(TIPParser::LenExprContext *ctx) override;
   Any visitAssignableExpr(TIPParser::AssignableExprContext *ctx) override;
@@ -48,5 +49,4 @@ public:
   Any visitErrorStmt(TIPParser::ErrorStmtContext *ctx) override;
   Any visitReturnStmt(TIPParser::ReturnStmtContext *ctx) override;
   Any visitFreeStmt(TIPParser::FreeStmtContext *ctx) override;
-  Any visitArraySizedExpr(TIPParser::ArraySizedExprContext *ctx) override;
 };

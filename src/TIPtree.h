@@ -168,13 +168,24 @@ public:
   std::string print() override;
 };
 
-// ArrayExpr - class for array constructors
+// ArrayExpr - class for array literal constructors
 class ArrayExpr: public Expr {
   std::vector<std::unique_ptr<Expr>> ELEMENTS;
 
 public:
   ArrayExpr( std::vector<std::unique_ptr<Expr>> ELEMENTS)
       :ELEMENTS(std::move(ELEMENTS)) {}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+
+// ArraySizedExpr - class for sized array constructors
+class  ArraySizedExpr : public Expr {
+  std::unique_ptr<Expr> SIZE;
+
+public:
+  ArraySizedExpr(std::unique_ptr<Expr> SIZE)
+      : SIZE(std::move(SIZE)) {}
   llvm::Value *codegen() override;
   std::string print() override;
 };
@@ -198,28 +209,6 @@ class LenExpr : public Expr {
 public:
   LenExpr(std::unique_ptr<Expr> ARRAY)
       : ARRAY(std::move(ARRAY)) {}
-  llvm::Value *codegen() override;
-  std::string print() override;
-};
-
-
-// FreeExpr - class for array length expressions
-class FreeStmt : public Stmt {
-  std::unique_ptr<Expr> ARRAY;
-
-public:
-  FreeStmt(std::unique_ptr<Expr> ARRAY)
-      : ARRAY(std::move(ARRAY)) {}
-  llvm::Value *codegen() override;
-  std::string print() override;
-};
-// ArraySizedExpr- class for array length expressions
-class  ArraySizedExpr : public Expr {
-  std::unique_ptr<Expr> SIZE;
-
-public:
-  ArraySizedExpr(std::unique_ptr<Expr> SIZE)
-      : SIZE(std::move(SIZE)) {}
   llvm::Value *codegen() override;
   std::string print() override;
 };
@@ -319,6 +308,17 @@ class ReturnStmt : public Stmt {
 
 public:
   ReturnStmt(std::unique_ptr<Expr> ARG) : ARG(std::move(ARG)) {}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+
+/// FreeStmt - class for array free statement
+class FreeStmt : public Stmt {
+  std::unique_ptr<Expr> ARRAY;
+
+public:
+  FreeStmt(std::unique_ptr<Expr> ARRAY)
+      : ARRAY(std::move(ARRAY)) {}
   llvm::Value *codegen() override;
   std::string print() override;
 };

@@ -344,6 +344,12 @@ Any TIPtreeBuild::visitArrayExpr(TIPParser::ArrayExprContext *ctx) {
   return "";
 }
 
+Any TIPtreeBuild::visitArraySizedExpr(TIPParser::ArraySizedExpr *ctx) {
+  visit(ctx->expr());
+  visitedExpr = llvm::make_unique<ArraySizedExpr>(std::move(visitedExpr));
+  return "";
+}
+
 Any TIPtreeBuild::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
   std::unique_ptr<Expr> array, index;
   if (ctx->IDENTIFIER() != nullptr) {
@@ -366,18 +372,6 @@ Any TIPtreeBuild::visitArrayIndexExpr(TIPParser::ArrayIndexExprContext *ctx) {
 Any TIPtreeBuild::visitLenExpr(TIPParser::LenExprContext *ctx) {
   visit(ctx->atom());
   visitedExpr = llvm::make_unique<LenExpr>(std::move(visitedExpr));
-  return "";
-}
-
-Any TIPtreeBuild::visitFreeStmt(TIPParser::FreeStmtContext *ctx) {
-  visit(ctx->atom());
-  visitedStmt = llvm::make_unique<FreeStmt>(std::move(visitedStmt));
-  return "";
-}
-
-Any TIPtreeBuild::visitArraySizedExpr(TIPParser::ArraySizedExpr *ctx) {
-  visit(ctx->expr());
-  visitedExpr = llvm::make_unique<ArraySizedExpr>(std::move(visitedExpr));
   return "";
 }
 
@@ -473,5 +467,11 @@ Any TIPtreeBuild::visitErrorStmt(TIPParser::ErrorStmtContext *ctx) {
 Any TIPtreeBuild::visitReturnStmt(TIPParser::ReturnStmtContext *ctx) {
   visit(ctx->expr());
   visitedStmt = llvm::make_unique<ReturnStmt>(std::move(visitedExpr));
+  return "";
+}
+
+Any TIPtreeBuild::visitFreeStmt(TIPParser::FreeStmtContext *ctx) {
+  visit(ctx->atom());
+  visitedStmt = llvm::make_unique<FreeStmt>(std::move(visitedStmt));
   return "";
 }
