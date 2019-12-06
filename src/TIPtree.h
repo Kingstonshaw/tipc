@@ -202,6 +202,29 @@ public:
   std::string print() override;
 };
 
+
+// FreeExpr - class for array length expressions
+class FreeExpr : public Expr {
+  std::unique_ptr<Expr> ARRAY;
+
+public:
+  FreeExpr(std::unique_ptr<Expr> ARRAY)
+      : ARRAY(std::move(ARRAY)) {}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+// ArraySizedExpr- class for array length expressions
+class  ArraySizedExpr : public Expr {
+  std::unique_ptr<Expr> SIZE;
+
+public:
+  ArraySizedExpr(std::unique_ptr<Expr> SIZE)
+      : SIZE(std::move(SIZE)) {}
+  llvm::Value *codegen() override;
+  std::string print() override;
+};
+
+
 /******************* Statement AST Nodes *********************/
 
 // Stmt - Base class for all statement nodes.

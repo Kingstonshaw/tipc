@@ -641,7 +641,15 @@ llvm::Value *ArrayIndexExpr::codegen() {
 }
 
 llvm::Value *LenExpr::codegen() {
-  return LogError("Not implemented");
+  Value *arrBase = ARRAY->codegen();
+  if (arrBase == nullptr) {
+    return nullptr;
+  }
+ 
+  auto *basePtr = Builder.CreateIntToPtr(
+    arrBase, Type::getInt64PtrTy(TheContext), "basePtr");
+  return Builder.CreateLoad(basePtr, "valueAt");
+  
 }
 
 llvm::Value *DeclStmt::codegen() {
