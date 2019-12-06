@@ -1,0 +1,9 @@
+main() {
+  var arr;
+  arr = array[10];
+  output arr[0];
+  output arr[9];
+  output len arr;
+  free arr;
+  return 0;
+}

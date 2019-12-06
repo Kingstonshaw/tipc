@@ -955,7 +955,7 @@ llvm::Value *FreeStmt::codegen() {
 
   auto *basePtr = Builder.CreateIntToPtr(
     arrBase, Type::getInt8PtrTy(TheContext), "basePtr");
-  return Builder.CreateCall(freeFun, {basePtr}, "freeInst");
+  return Builder.CreateCall(freeFun, {basePtr});
 }
 
 } // namespace TIPtree
