@@ -52,6 +52,7 @@ atom : parenExpr	#parenAtom
      | arrayExpr	#arrayAtom
      | arrayIndexExpr	#arrayIndexAtom
      | lenExpr		#lenAtom
+     | freeExpr		#freeAtom
 ;
 
 parenExpr : '(' expr ')' ;
@@ -70,6 +71,9 @@ fieldExpr : IDENTIFIER ':' expr ;
 // "Access" in TIP
 accessExpr : (IDENTIFIER | deRefExpr | parenExpr) '.' IDENTIFIER ;
 
+// "ArraySized" in TIP
+arraySizedExpr : KARRAY '[' expr ']' ;
+
 // "Array"
 arrayExpr : '[' (expr (',' expr)*)? ']' ;
 
@@ -78,6 +82,9 @@ arrayIndexExpr : (parenExpr | IDENTIFIER) '[' expr ']' ;
 
 // "Len"
 lenExpr : KLEN atom ;
+
+// "Free"
+freeExpr : KFREE atom ;
 
 // "AssignableExpression" in TIP
 assignableExpr : (IDENTIFIER | deRefExpr | arrayIndexExpr) ;
@@ -146,7 +153,9 @@ KRETURN : 'return' ;
 KNULL   : 'null' ;
 KOUTPUT : 'output' ;
 KERROR  : 'error' ;
-KLEN	: 'len' ;
+KARRAY  : 'array' ;
+KLEN    : 'len' ;
+KFREE   : 'free' ;
 
 // "Identifier" (in Scala) is "X" (in SPA)
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]* ;
