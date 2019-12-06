@@ -52,7 +52,6 @@ atom : parenExpr	#parenAtom
      | arrayExpr	#arrayAtom
      | arrayIndexExpr	#arrayIndexAtom
      | lenExpr		#lenAtom
-     | freeExpr		#freeAtom
 ;
 
 parenExpr : '(' expr ')' ;
@@ -82,9 +81,6 @@ arrayIndexExpr : (parenExpr | IDENTIFIER) '[' expr ']' ;
 
 // "Len"
 lenExpr : KLEN atom ;
-
-// "Free"
-freeExpr : KFREE atom ;
 
 // "AssignableExpression" in TIP
 assignableExpr : (IDENTIFIER | deRefExpr | arrayIndexExpr) ;
@@ -117,13 +113,16 @@ whileStmt : KWHILE '(' expr ')' statement ;
 ifStmt : KIF '(' expr ')' statement (KELSE statement)? ;
 
 // "Output" in TIP
-outputStmt : KOUTPUT expr ';'  ;
+outputStmt : KOUTPUT expr ';' ;
 
 // "Error" in TIP
-errorStmt : KERROR expr ';'  ;
+errorStmt : KERROR expr ';' ;
 
 // "Return" in TIP
-returnStmt : KRETURN expr ';'  ;
+returnStmt : KRETURN expr ';' ;
+
+// "Free"
+freeStmt : KFREE expr ';' ;
 
 
 ////////////////////// TIP Lexicon ////////////////////////// 
