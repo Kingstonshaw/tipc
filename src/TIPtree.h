@@ -204,11 +204,11 @@ public:
 
 
 // FreeExpr - class for array length expressions
-class FreeExpr : public Expr {
+class FreeStmt : public Stmt {
   std::unique_ptr<Expr> ARRAY;
 
 public:
-  FreeExpr(std::unique_ptr<Expr> ARRAY)
+  FreeStmt(std::unique_ptr<Expr> ARRAY)
       : ARRAY(std::move(ARRAY)) {}
   llvm::Value *codegen() override;
   std::string print() override;

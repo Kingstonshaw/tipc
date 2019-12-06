@@ -369,9 +369,9 @@ Any TIPtreeBuild::visitLenExpr(TIPParser::LenExprContext *ctx) {
   return "";
 }
 
-Any TIPtreeBuild::visitFreeExpr(TIPParser::FreeExprContext *ctx) {
+Any TIPtreeBuild::visitFreeStmt(TIPParser::FreeStmtContext *ctx) {
   visit(ctx->atom());
-  visitedExpr = llvm::make_unique<FreeExpr>(std::move(visitedExpr));
+  visitedStmt = llvm::make_unique<FreeStmt>(std::move(visitedStmt));
   return "";
 }
 
