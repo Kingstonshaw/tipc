@@ -472,6 +472,6 @@ Any TIPtreeBuild::visitReturnStmt(TIPParser::ReturnStmtContext *ctx) {
 
 Any TIPtreeBuild::visitFreeStmt(TIPParser::FreeStmtContext *ctx) {
   visit(ctx->atom());
-  visitedStmt = llvm::make_unique<FreeStmt>(std::move(visitedStmt));
+  visitedStmt = llvm::make_unique<FreeStmt>(std::move(visitedExpr));
   return "";
 }
