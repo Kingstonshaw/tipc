@@ -1,0 +1,7 @@
+main(n) {
+  var arr;
+  arr = array[n];
+  arr[3] = 7;
+  output arr[3];
+  return 0;
+}
