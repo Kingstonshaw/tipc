@@ -1,5 +1,6 @@
 main() {
   var arr;
+  arr = array[10];
   output len arr;
   return 0;
 }
