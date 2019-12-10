@@ -2,19 +2,46 @@
 
 quickSort(arr, low, high)
 {
+    var pi;
     if (low < high)
         {
         pi = partition(arr, low, high);
-
         quickSort(arr, low, pi - 1);  // Before pi
         quickSort(arr, pi + 1, high); // After pi
         }
  }
 
 
+partition (arr, low, high)
+{ var i,j,tempa,tempb;
+    // pivot (Element to be placed at right position)
+    pivot = arr[high];  
+ 
+    i = (low - 1)  // Index of smaller element
+
+    for (j = low; j <= high- 1; j++)
+    {
+        // If current element is smaller than the pivot
+        if (arr[j] < pivot)
+        {
+            i++;    // increment index of smaller element
+            arr[i]=tempa;
+            arr[i]=arr[j];
+            arr[j]=tempa;
+            
+        }
+    }
+    arr[i+1]=tempb;
+    arr[i+1]=arr[high];
+    arr[high]=tempb;
+  
+    return (i + 1);
+}
+
 main(x) {
-  var arr,low,high;
-    arr = [1, 2, 3, 4, 5];
-      output arr[x];
-     return 0;
+  var arr;
+  arr = [3, 2, 5, 1, 7,4];
+  quickSort(arr,0,5);
+  output arr[x];
+  return 0;
         }
