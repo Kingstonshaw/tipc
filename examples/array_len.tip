@@ -1,5 +1,6 @@
-main() {
+main(n) {
   var arr;
+  arr = array[n];
   output len arr;
   return 0;
 }

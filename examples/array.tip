@@ -5,5 +5,6 @@ main() {
   output arr[3];
   output arr[4];
   output len arr;
+  free arr;
   return 0;
 }
